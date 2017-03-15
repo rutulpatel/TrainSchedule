@@ -12,22 +12,31 @@ $(function() {
 
     var database = firebase.database();
 
-    function addEmployeeToHTML(name, destination, time, frequency) {
-        var trow = $("<tr>");
+    function addEmployeeToHTML(id, name, destination, time, frequency) {
+        var trow = $("<tr>").attr("id", id);
         var tcolName = $("<td>").text(name);
         var tcolDest = $("<td>").text(destination);
         var tcolTime = $("<td>").text(time);
         var tcolFreq = $("<td>").text(frequency);
         var tcolMinAway = $("<td>").text(frequency);
-
-        trow.append(tcolName).append(tcolDest).append(tcolTime).append(tcolFreq).append(tcolMinAway);
+        trow.append(tcolName).append(tcolDest).append(tcolFreq).append(tcolTime).append(tcolMinAway);
         $(".train-data").append(trow);
     }
 
     //loads data from database at initial page load and after every change made to the database
     database.ref().on("child_added", function(cS) { //cS stands for childSnapshot
-        addEmployeeToHTML(cS.val().name, cS.val().destination, cS.val().time, cS.val().frequency);
-    });
+            addEmployeeToHTML(cS.getKey(), cS.val().name, cS.val().destination, cS.val().time, cS.val().frequency);
+        }),
+        function(errorObj) {
+            console.log("The read failed: " + errorObj.code);
+        };
+
+    database.ref().on("child_removed", function(cS) {
+            $("#" + cS.getKey()).remove();
+        }),
+        function(errorObj) {
+            console.log("Error: " + errorObj.code);
+        };
 
     $("#submitBtn").on("click", function(event) {
         event.preventDefault();
@@ -42,8 +51,6 @@ $(function() {
             frequency: freq,
             dateAdded: firebase.database.ServerValue.TIMESTAMP
         });
-        //addEmployeeToHTML(name, destination, time, freq);
         $("[id^=train]").val("");
     });
-
 });
