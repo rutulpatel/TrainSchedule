@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/styles.css">
     <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+    <script src="assets/javascript/moment.js"></script>
 </head>
 
 <body>
@@ -54,23 +55,39 @@
                         <form>
                             <div class="form-group">
                                 <label class="control-label">Train Name</label>
-                                <input class="form-control" type="text" placeholder="Train name" id="trainName">
+                                <input class="form-control" type="text" placeholder="Train name" id="trainName" data-error="Train name is required" required>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Destination </label>
-                                <input class="form-control" type="text" placeholder="Destination" id="trainDestination">
+                                <input class="form-control" type="text" placeholder="Destination" id="trainDestination" data-error="Destination is required" required>
                             </div>
                             <div class="form-group">
-                                <label class="control-label">First Train Timer (HH:mm am/pm</label>
-                                <input class="form-control" type="time" id="trainTime">
+                                <label class="control-label">First Train Timer (HH:mm AM/PM)</label>
+                                <input class="form-control" type="time" id="trainTime" data-error="First train timer is required" required>
                             </div>
                             <div class="form-group">
                                 <label class="control-label">Frequency (min)</label>
-                                <input class="form-control" type="number" placeholder="Frequency" id="trainFreq">
+                                <input class="form-control" type="number" placeholder="Frequency" id="trainFreq" data-error="Frequency is required" required>
                             </div>
-                            <button class="btn btn-info" type="submit" id="submitBtn">Submit </button>
+                            <button class="btn btn-info" type="submit" id="submitBtn" data-toggle="modal">Submit </button>
                         </form>
                     </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Please correct the following...</h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <!--<div class="modal-footer">
+                        <button type="button" class="btn btn-info" data-dismiss="modal">Okay</button>
+                    </div>-->
                 </div>
             </div>
         </div>
