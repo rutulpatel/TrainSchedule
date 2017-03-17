@@ -12,27 +12,36 @@ $(function() {
 
     var database = firebase.database();
 
-    function addEmployeeToHTML(id, name, destination, time, frequency) {
+    function addEmployeeToHTML(id, name, destination, frequency, startTime) {
+
+        var now = moment();
+        var nextArrival = moment(startTime, "HH:mm").add(parseInt(frequency), 'm').format("HH:mm");
+
+
+        console.log("startTime = " + startTime);
+        while (moment(nextArrival, "HH:mm").isBefore(now)) {
+            nextArrival = moment(nextArrival, "HH:mm").add(parseInt(frequency), 'm').format("HH:mm");
+        }
+
+        console.log(nextArrival);
+
+        var minAway = moment(nextArrival, "HH:mm").subtract(now.format("H"), "H").subtract(now.format("m"), "m").format("m");
+        console.log(minAway);
+
         var trow = $("<tr>").attr("id", id);
         var tcolName = $("<td>").text(name);
         var tcolDest = $("<td>").text(destination);
-        var tcolTime = $("<td>").text(time);
+        var tcolNextArrivalTime = $("<td>").text(nextArrival);
         var tcolFreq = $("<td>").text(frequency);
-        var tcolMinAway = $("<td>").text(frequency);
-        trow.append(tcolName).append(tcolDest).append(tcolFreq).append(tcolTime).append(tcolMinAway);
+        var tcolMinAway = $("<td>").text(minAway);
+        trow.append(tcolName).append(tcolDest).append(tcolFreq).append(tcolNextArrivalTime).append(tcolMinAway);
         $(".train-data").append(trow);
-
-        // console.log(moment(time, "HH:mm").format("HH:mm"));
-        console.log(time);
-        var nextTrain = moment(time, "HH:mm");
-
-        console.log(nextTrain.add(10, "minutes"));
 
     }
 
     //loads data from database at initial page load and after every change made to the database
     database.ref().on("child_added", function(cS) { //cS stands for childSnapshot
-            addEmployeeToHTML(cS.getKey(), cS.val().name, cS.val().destination, cS.val().time, cS.val().frequency);
+            addEmployeeToHTML(cS.getKey(), cS.val().name, cS.val().destination, cS.val().frequency, cS.val().time);
         }),
         function(errorObj) {
             console.log("The read failed: " + errorObj.code);
