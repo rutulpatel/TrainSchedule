@@ -29,10 +29,12 @@ $(function() {
                 nextArrival = moment(nextArrival, "HH:mm").add(parseInt(frequency), 'm').format("HH:mm");
             }
 
-            console.log(nextArrival);
+            console.log("Next Arrival = " + nextArrival);
 
             var minAway = moment(nextArrival, "HH:mm").subtract(now.format("H"), "H").subtract(now.format("m"), "m").format("m");
             console.log(minAway);
+            console.log("MinAway = " + minAway);
+
 
             var trow = $("<tr>");
             var tcolName = $("<td>").text(name);
