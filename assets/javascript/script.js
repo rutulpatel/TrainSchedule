@@ -42,7 +42,7 @@ $(function() {
             var tcolNextArrivalTime = $("<td>").text(nextArrival);
             var tcolFreq = $("<td>").text(frequency);
             var tcolMinAway = $("<td>").text(minAway);
-            var cancelButton = $("<td>").html($("<i>").attr({ "class": "fa fa-ban", "id": id, "aria-hidden": "true" }));
+            var cancelButton = $("<td>").html($("<i>").attr({ "class": "fa fa-times", "id": id, "aria-hidden": "true" }));
             trow.append(cancelButton).append(tcolName).append(tcolDest).append(tcolFreq).append(tcolNextArrivalTime).append(tcolMinAway);
             $(".train-data").append(trow);
             $("#" + id).on("click", removeRow);
