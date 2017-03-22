@@ -25,13 +25,18 @@ $(function() {
 
 
             console.log("startTime = " + startTime);
-            while (moment(nextArrival, "HH:mm").isBefore(now)) {
-                nextArrival = moment(nextArrival, "HH:mm").add(parseInt(frequency), 'm').format("HH:mm");
+            if (moment(startTime, "HH:mm").isBefore(now)) {
+                while (moment(nextArrival, "HH:mm").isBefore(now)) {
+                    nextArrival = moment(nextArrival, "HH:mm").add(parseInt(frequency), 'm').format("HH:mm");
+                }
             }
 
             console.log("Next Arrival = " + nextArrival);
 
-            var minAway = moment(nextArrival, "HH:mm").subtract(now.format("H"), "H").subtract(now.format("m"), "m").format("m");
+            var minAway;
+            var hour = moment(nextArrival, "HH:mm").subtract(now.format("H"), "H").format("H");
+            var min = moment(nextArrival, "HH:mm").subtract(now.format("m"), "m").format("m");
+            minAway = (parseInt(hour) * 60) + parseInt(min);
             console.log(minAway);
             console.log("MinAway = " + minAway);
 
