@@ -1,5 +1,4 @@
 $(function() {
-
     //Initialize firebase
     var config = {
         apiKey: "AIzaSyAkFnY9KB3kxQDolUKL88SJ0etCPXrbUdg",
@@ -9,37 +8,28 @@ $(function() {
         messagingSenderId: "494060214144"
     };
     firebase.initializeApp(config);
-
     var database = firebase.database();
 
+    //remove a record from the database based on child's id
     function removeRow() {
-        console.log(database);
         database.ref().child($(this).attr("id")).remove();
     }
 
-    function addRow(id, name, destination, frequency, startTime) {
 
+    //add new row to the HTML table 
+    function addRow(id, name, destination, frequency, startTime) {
         if (!$("#" + id).length) {
             var now = moment();
+            var minAway;
             var nextArrival = moment(startTime, "HH:mm").add(parseInt(frequency), 'm').format("HH:mm");
-
-
-            console.log("startTime = " + startTime);
             if (moment(startTime, "HH:mm").isBefore(now)) {
                 while (moment(nextArrival, "HH:mm").isBefore(now)) {
                     nextArrival = moment(nextArrival, "HH:mm").add(parseInt(frequency), 'm').format("HH:mm");
                 }
             }
-
-            console.log("Next Arrival = " + nextArrival);
-
-            var minAway;
             var hour = moment(nextArrival, "HH:mm").subtract(now.format("H"), "H").format("H");
             var min = moment(nextArrival, "HH:mm").subtract(now.format("m"), "m").format("m");
             minAway = (parseInt(hour) * 60) + parseInt(min);
-            console.log(minAway);
-            console.log("MinAway = " + minAway);
-
 
             var trow = $("<tr>");
             var tcolName = $("<td>").text(name);
@@ -55,6 +45,7 @@ $(function() {
     }
 
 
+    //function to subscribe on child_added database event 
     function onChildAdded() {
         //clear html before loading
         $(".train-data").html("");
@@ -67,6 +58,7 @@ $(function() {
             };
     }
 
+    //function to subscribe on child_remove database event 
     function onChildRemoved() {
         //get called when the data is deleted from the database
         database.ref().on("child_removed", function(cS) {
@@ -77,14 +69,13 @@ $(function() {
             };
     }
 
+    //listens to submitBtn clicks
     $("#submitBtn").on("click", function(event) {
         event.preventDefault();
         var name = $("#trainName").val().trim();
         var destination = $("#trainDestination").val().trim();
         var time = $("#trainTime").val().trim();
         var freq = $("#trainFreq").val().trim();
-
-
         var msg = "<h5>";
         if (name === "" || destination === "" || time === "" || freq === "") {
             if (name === "") {
@@ -115,6 +106,7 @@ $(function() {
         }
     });
 
+    //initializes the listeners and timer to update data every minute
     onChildAdded();
     onChildRemoved();
     setInterval(onChildAdded, 60 * 1000);
